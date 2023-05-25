@@ -21,7 +21,7 @@ from transformers.modeling_outputs import (
 )
 from transformers.modeling_utils import PreTrainedModel
 from transformers.utils import logging
-from configuration_RW import RWConfig
+from .configuration_RW import RWConfig
 
 logger = logging.get_logger(__name__)
 
