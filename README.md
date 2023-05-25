@@ -18,7 +18,7 @@ pipeline = transformers.pipeline(
     device_map="auto",
 )
 sequences = pipeline(
-    "My favourite data joke is",
+    "My favourite dad joke is",
     max_length=200,
     do_sample=True,
     top_k=10,
