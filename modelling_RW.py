@@ -363,13 +363,11 @@ class DecoderLayer(nn.Module):
         super().__init__()
         hidden_size = config.hidden_size
 
-        self.input_layernorm = LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
+        self.ln_attn = LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
+        self.ln_mlp = LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
+
         self.num_heads = config.n_head
         self.self_attention = Attention(config)
-
-        if not config.parallel_attn:
-            # unused if parallel attn
-            self.post_attention_layernorm = LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
 
         self.mlp = MLP(config)
 
@@ -389,12 +387,14 @@ class DecoderLayer(nn.Module):
         output_attentions: bool = False,
     ):
 
-        layernorm_output = self.input_layernorm(hidden_states)
+        ln_attn = self.ln_attn(hidden_states)
+        ln_mlp = self.ln_mlp(hidden_states)
+
         residual = hidden_states
 
         # Self attention.
         attn_outputs = self.self_attention(
-            layernorm_output,
+            ln_attn,
             layer_past=layer_past,
             attention_mask=attention_mask,
             alibi=alibi,
@@ -405,19 +405,14 @@ class DecoderLayer(nn.Module):
 
         attention_output = attn_outputs[0]
 
-        if not self.config.parallel_attn:
-            residual = dropout_add(attention_output, residual, self.config.attention_dropout, training=self.training)
-            layernorm_output = self.post_attention_layernorm(residual)
-
         outputs = attn_outputs[1:]
 
         # MLP.
-        mlp_output = self.mlp(layernorm_output)
+        mlp_output = self.mlp(ln_mlp)
 
-        if self.config.parallel_attn:
-            mlp_output += attention_output
-
-        output = dropout_add(mlp_output, residual, self.config.hidden_dropout, training=self.training)
+        output = dropout_add(
+            mlp_output + attention_output, residual, self.config.hidden_dropout, training=self.training
+        )
 
         if use_cache:
             outputs = (output,) + outputs
