@@ -1,0 +1,6 @@
+accelerate==0.19.0
+einops==0.6.1
+torch==2.0.1
+torchvision==0.15.2
+transformers==4.29.2
+triton==2.0.0
