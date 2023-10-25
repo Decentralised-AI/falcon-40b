@@ -11,9 +11,9 @@ inference: false
 
 # 🚀 Falcon-40B
 
-**Falcon-40B is a 40B parameters causal decoder-only model built by [TII](https://www.tii.ae) and trained on 1,000B tokens of [RefinedWeb](https://huggingface.co/datasets/tiiuae/falcon-refinedweb) enhanced with curated corpora. It is made available under the [TII Falcon LLM License](https://huggingface.co/tiiuae/falcon-40b/blob/main/LICENSE.txt).**
+**Falcon-40B is a 40B parameters causal decoder-only model built by [TII](https://www.tii.ae) and trained on 1,000B tokens of [RefinedWeb](https://huggingface.co/datasets/tiiuae/falcon-refinedweb) enhanced with curated corpora. It is made available under the [Apache 2.0 software license](https://falconllm.tii.ae/#:~:text=Falcon%2040B%20is%20made%20available%20under%20the%20permissive%20Apache%202.0%20software%20license%20for%20researchers%20and%20commercial%20users%20alike.).**
 
-*Paper coming soon 😊.*
+*Paper coming soon.* Meanwhile https://falconllm.tii.ae/falcon.html provides the basic overview.
 
 ## Why use Falcon-40B?
 
